@@ -3,6 +3,11 @@ package com.hubtwork.lola.models.riotApiBridge.compiledDTO
 /**
  *      DTO for FrontEnd Client about searching Summoner Summary Info by summoner name
  *
+ *      1. 소환사 명
+ *      2. 프로필 아이콘
+ *      3. 소환사 레벨
+ *      4. 랭크 티어 정보 [ 솔랭 / 자유랭 ]
+ *
  */
 data class CompiledSummonerSummary(
         var summonerName: String,

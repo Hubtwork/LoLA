@@ -1,10 +1,10 @@
 package com.hubtwork.lola.riotAPI
 
 import com.hubtwork.lola.config.RiotApiConst
-import com.hubtwork.lola.models.CompiledRankStat
-import com.hubtwork.lola.models.SummonerBasic
-import com.hubtwork.lola.models.SummonerLeagueStat
-import com.hubtwork.lola.models.SummonerSummary
+import com.hubtwork.lola.models.riotApiBridge.compiledDTO.CompiledRankStat
+import com.hubtwork.lola.models.riotApiBridge.compiledDTO.CompiledSummonerSummary
+import com.hubtwork.lola.models.riotApiBridge.summoner.SummonerBasic
+import com.hubtwork.lola.models.riotApiBridge.summoner.SummonerLeagueStat
 import com.hubtwork.lola.modules.lolTranslate.Translator
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -12,14 +12,12 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.reactive.function.client.WebClient
 import org.springframework.core.ParameterizedTypeReference
-import java.lang.Math.round
+import kotlin.math.roundToInt
 
 
 @RestController
 @RequestMapping("/api/v1/riot")
 class RiotApiBridge(private val riotClient: WebClient) {
-
-    companion object
 
     @GetMapping("/lol/summoner/{summoner_name}")
     fun getLolSummoner(@PathVariable("summoner_name") name: String): SummonerBasic? =
@@ -45,11 +43,10 @@ class RiotApiBridge(private val riotClient: WebClient) {
                     val rankStat = Translator.rank_stat_stringBuilder(stat.tier, stat.rank, stat.leaguePoints)
                     val rankWin = stat.wins
                     val rankLose = stat.losses
-                    val winningRate = round(1000 * (rankWin.toDouble()/(rankWin+rankLose))).toDouble()/10
-                    var compiledRank = CompiledRankStat(rankType, rankStat, rankWin, rankLose, winningRate)
-                    rankStats.add(compiledRank)
+                    val winningRate = ((1000 * (rankWin.toDouble() / (rankWin + rankLose))).roundToInt().toDouble())/10
+                    rankStats.add(CompiledRankStat(rankType, rankStat, rankWin, rankLose, winningRate))
                 }
-                return SummonerSummary(summonerBasic.name, summonerBasic.profileIconId, summonerBasic.summonerLevel, rankStats).toString()
+                return CompiledSummonerSummary(summonerBasic.name, summonerBasic.profileIconId, summonerBasic.summonerLevel, rankStats).toString()
             }
         }
         return "Error : load Failed"

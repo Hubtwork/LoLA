@@ -1,5 +1,10 @@
-package com.hubtwork.lola.models
+package com.hubtwork.lola.models.riotApiBridge.summoner
 
+/**
+ *              get summoner Basic DATA by Summoner Name
+ *
+ *  response about "https://kr.api.riotgames.com/lol/league/v4/entries/by-summoner/{Encrypted Summoner Id}"
+ */
 data class SummonerLeagueStat(
         var summonerId: String, // Encrypted Summoner ID
         var summonerName: String,
@@ -14,12 +19,4 @@ data class SummonerLeagueStat(
         var inactive: Boolean,
         var freshBlood: Boolean,
         var hotStreak: Boolean
-)
-
-data class CompiledRankStat(
-        var rankType: String,
-        var rankStat: String,    // 티어 + 랭크 + 점수
-        var rankWin: Int,
-        var rankLose: Int,
-        var winningRate: Double // 승률 : 소수점 1자리까지 .
 )

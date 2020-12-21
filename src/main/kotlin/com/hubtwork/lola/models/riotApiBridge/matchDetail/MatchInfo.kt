@@ -1,8 +1,9 @@
 package com.hubtwork.lola.models.riotApiBridge.matchDetail
 
-
 /**
- * response about "https://kr.api.riotgames.com/lol/match/v4/matches/{matchId}"
+ *              get Detail DATA about particular Match
+ *
+ *  response about "https://kr.api.riotgames.com/lol/match/v4/matches/{matchId}"
  */
 data class MatchInfo(
     var gameId: Long,       // matchID

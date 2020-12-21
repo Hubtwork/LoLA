@@ -19,6 +19,8 @@ import java.lang.Math.round
 @RequestMapping("/api/v1/riot")
 class RiotApiBridge(private val riotClient: WebClient) {
 
+    companion object
+
     @GetMapping("/lol/summoner/{summoner_name}")
     fun getLolSummoner(@PathVariable("summoner_name") name: String): SummonerBasic? =
             riotClient.get()
@@ -32,7 +34,7 @@ class RiotApiBridge(private val riotClient: WebClient) {
         val summonerBasic = getLolSummoner(name)
         summonerBasic?.let {
             val summonerStat = riotClient.get()
-                    .uri { it -> it.pathSegment(RiotApiConst.uri_LOL, RiotApiConst.uri_sum_stat_1, RiotApiConst.uri_sum_stat_2, RiotApiConst.uri_sum_stat_3, RiotApiConst.uri_sum_stat_4, summonerBasic.id).build() }
+                    .uri { it.pathSegment(RiotApiConst.uri_LOL, RiotApiConst.uri_sum_stat_1, RiotApiConst.uri_sum_stat_2, RiotApiConst.uri_sum_stat_3, RiotApiConst.uri_sum_stat_4, summonerBasic.id).build() }
                     .retrieve()
                     .bodyToMono(typeReference<List<SummonerLeagueStat>>())
                     .block()
@@ -52,6 +54,9 @@ class RiotApiBridge(private val riotClient: WebClient) {
         }
         return "Error : load Failed"
     }
+
+
+
 }
 
 inline fun <reified T> typeReference() = object : ParameterizedTypeReference<T>() {}

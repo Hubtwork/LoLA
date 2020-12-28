@@ -1,10 +1,14 @@
-package com.hubtwork.lola.models.riotApiBridge.summoner
+package com.hubtwork.lola.models.dto.summoner
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 
 /**
  *              get summoner Basic DATA by Summoner Name
  *
  *  response about "https://kr.api.riotgames.com/lol/league/v4/entries/by-summoner/{Encrypted Summoner Id}"
  */
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 data class SummonerLeagueStat(
         var summonerId: String, // Encrypted Summoner ID
         var summonerName: String,

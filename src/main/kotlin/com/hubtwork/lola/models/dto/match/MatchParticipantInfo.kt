@@ -1,4 +1,4 @@
-package com.hubtwork.lola.models.riotApiBridge.matchDetail
+package com.hubtwork.lola.models.dto.match
 
 /**
  *  DTO for participant Detail

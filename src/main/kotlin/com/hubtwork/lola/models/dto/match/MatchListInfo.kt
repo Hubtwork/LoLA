@@ -1,4 +1,4 @@
-package com.hubtwork.lola.models.riotApiBridge.matchInfo
+package com.hubtwork.lola.models.dto.match
 
 /**
  *          get match Info of particular Summoner

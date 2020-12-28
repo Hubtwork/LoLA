@@ -1,32 +1,29 @@
-package com.hubtwork.lola.riotAPI
+package com.hubtwork.lola.controller
 
-import com.hubtwork.lola.config.RiotApiConst
-import com.hubtwork.lola.models.riotApiBridge.compiledDTO.CompiledRankStat
-import com.hubtwork.lola.models.riotApiBridge.compiledDTO.CompiledSummonerSummary
-import com.hubtwork.lola.models.riotApiBridge.summoner.SummonerBasic
-import com.hubtwork.lola.models.riotApiBridge.summoner.SummonerLeagueStat
-import com.hubtwork.lola.modules.lolTranslate.Translator
+import com.google.gson.Gson
+import com.hubtwork.lola.service.riotAPI.RiotApiBridgeService
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
-import org.springframework.web.reactive.function.client.WebClient
 import org.springframework.core.ParameterizedTypeReference
-import kotlin.math.roundToInt
+import org.springframework.web.client.RestTemplate
 
 
 @RestController
 @RequestMapping("/api/v1/riot")
-class RiotApiBridge(private val riotClient: WebClient) {
+class RiotApiBridge(private val restTemplate: RestTemplate, private val gson: Gson) {
+
+    private var riotApiService = RiotApiBridgeService(restTemplate)
 
     @GetMapping("/lol/summoner/{summoner_name}")
-    fun getLolSummoner(@PathVariable("summoner_name") name: String): SummonerBasic? =
-            riotClient.get()
-                    .uri { it.pathSegment(RiotApiConst.uri_LOL, RiotApiConst.uri_sum_1, RiotApiConst.uri_sum_2, RiotApiConst.uri_sum_3, RiotApiConst.uri_sum_4, name).build() }
-                    .retrieve()
-                    .bodyToMono(SummonerBasic::class.java)
-                    .block()
+    fun getLolSummoner(@PathVariable("summoner_name") name: String): String {
+        val summonerSearchResult = riotApiService.getSummonerStatsBySummonerName(name)
+        System.out.print(gson.toJson(summonerSearchResult))
+        return gson.toJson(summonerSearchResult)
+    }
 
+    /**
     @GetMapping("/lol/stats/{summoner_name}")
     fun getLolSummonerStats(@PathVariable("summoner_name") name: String): String? {
         val summonerBasic = getLolSummoner(name)
@@ -51,6 +48,7 @@ class RiotApiBridge(private val riotClient: WebClient) {
         }
         return "Error : load Failed"
     }
+    */
 
 
 

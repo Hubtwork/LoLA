@@ -1,4 +1,4 @@
-package com.hubtwork.lola.models.riotApiBridge.matchDetail
+package com.hubtwork.lola.models.dto.match
 
 data class MatchTimeLine(
     var participantId: Int,

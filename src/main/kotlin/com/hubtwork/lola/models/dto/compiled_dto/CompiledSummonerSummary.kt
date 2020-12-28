@@ -1,4 +1,4 @@
-package com.hubtwork.lola.models.riotApiBridge.compiledDTO
+package com.hubtwork.lola.models.dto.compiled_dto
 
 /**
  *      DTO for FrontEnd Client about searching Summoner Summary Info by summoner name

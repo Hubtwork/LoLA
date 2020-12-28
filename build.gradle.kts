@@ -21,8 +21,10 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 
-    // dependency for WebFlux libraries... like webClient
-    implementation("org.springframework.boot:spring-boot-starter-webflux")
+    // libs for RestTemplate
+    implementation("org.springframework:spring-web")
+    implementation("com.fasterxml.jackson.core:jackson-databind")
+    implementation("com.google.code.gson:gson:2.8.6")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
 }

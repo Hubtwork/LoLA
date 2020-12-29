@@ -12,15 +12,19 @@ package com.hubtwork.lola.models.dto.match
  *  4. beginTime & endTime ( long )     ( filtering by time )
  *  5. beginIndex & endIndex ( int )    ( filtering by index Range - maximum range : 100 )
  *
+ *  6. platformId ( String )            ( platform Info :: KR, NA , ... )
+ *
+ *
  *  return ArrayList<MatchInfo>
  */
 
-data class MatchListInfo(
-    var season: Int,
+data class MatchReference(
+    var platformId: String,
     var gameId: Long,       // matchId
-    var role: String,       // ?
     var champion: Int,
     var queue: Int,
-    var lane: String,       // 큐 돌릴 때 선택한 라인
-    var timestamp: Long
+    var season: Int,
+    var timestamp: Long,
+    var role: String,       // ?            ( DUO, SOLO, NONE ... etc )
+    var lane: String       // 큐 돌릴 때 선택한 라인
 )

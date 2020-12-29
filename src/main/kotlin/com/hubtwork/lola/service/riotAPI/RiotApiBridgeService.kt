@@ -1,9 +1,13 @@
 package com.hubtwork.lola.service.riotAPI
 
 import com.google.gson.Gson
-import com.hubtwork.lola.config.RiotApiConst
+import com.hubtwork.lola.common.config.RiotApiConst
 import com.hubtwork.lola.models.dto.compiled_dto.CompiledRankStat
 import com.hubtwork.lola.models.dto.compiled_dto.CompiledSummonerSummary
+import com.hubtwork.lola.models.dto.staticdata.Champion
+import com.hubtwork.lola.models.dto.staticdata.Item
+import com.hubtwork.lola.models.dto.staticdata.ItemList
+import com.hubtwork.lola.models.dto.staticdata.Realm
 import com.hubtwork.lola.models.dto.summoner.SummonerBasic
 import com.hubtwork.lola.models.dto.summoner.SummonerLeagueStat
 import com.hubtwork.lola.modules.lolTranslate.Translator
@@ -41,6 +45,66 @@ class RiotApiBridgeService(private val restTemplate: RestTemplate){
             }
         }
         return CompiledSummonerSummary(summonerBasic.name, summonerBasic.profileIconId, summonerBasic.summonerLevel, rankStats)
+    }
+
+    fun getDataDragonVer(): String =
+        restTemplate.getForObject(RiotApiConst.uri_datadragon_version, String::class)
+
+    fun checkDataDragonRegion(platform: String): Realm? {
+        val url =
+            arrayListOf(RiotApiConst.uri_datadragon_region_check, ("$platform.json")).joinToString(separator = "/")
+        val realmResult: ResponseEntity<Realm> = restTemplate.exchange(
+            url,
+            HttpMethod.GET,
+            null,
+            Realm::class.java
+        )
+        return realmResult.body
+    }
+
+
+    // Deprecated
+    /*
+    fun getDataDragonItem(platform: String): String {
+        val realm: Realm? = checkDataDragonRegion(platform)
+        realm?.let {
+            val url = RiotApiConst.uri_datadragon_item(realm.n["item"]!!, realm.l)
+            val itemResult: ResponseEntity<ItemList> = restTemplate.exchange(
+                url,
+                HttpMethod.GET,
+                null,
+                ItemList::class.java
+                )
+            print(itemResult.body?.data?.get("1001"))
+            return gson.toJson(itemResult.body)
+        }
+        return "Error - Realm did not found"
+    }
+     */
+
+    fun getSpecificChampion(platform: String, championName: String) : Champion? {
+        val realm: Realm? = checkDataDragonRegion(platform)
+
+
+        return null
+    }
+
+    fun getSpecificItem(platform: String, itemId: String) : Item? {
+        val realm: Realm? = checkDataDragonRegion(platform)
+        realm?.let {
+            val url = RiotApiConst.uri_datadragon_item(realm.n["item"]!!, realm.l)
+            val itemListJson: ResponseEntity<ItemList> = restTemplate.exchange(
+                url,
+                HttpMethod.GET,
+                null,
+                ItemList::class.java
+            )
+            val item = itemListJson.body!!.data[itemId].let {
+                return it
+            }
+            return null
+        }
+        return null
     }
 
     /**

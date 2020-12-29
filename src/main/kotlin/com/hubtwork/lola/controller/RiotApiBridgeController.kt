@@ -23,6 +23,20 @@ class RiotApiBridge(private val restTemplate: RestTemplate, private val gson: Gs
         return gson.toJson(summonerSearchResult)
     }
 
+    @GetMapping("/lol/realm/{platform}")
+    fun getRealm(@PathVariable("platform") platform: String): String {
+        val realmSearchResult = riotApiService.checkDataDragonRegion(platform)
+        // System.out.print(realmSearchResult?.n?.get("item"))
+        return gson.toJson(realmSearchResult)
+    }
+
+    @GetMapping("/lol/item/{platform}/{itemId}")
+    fun getAllItem(@PathVariable("platform") platform: String, @PathVariable("itemId") itemId: String): String {
+        val itemResult = riotApiService.getSpecificItem(platform, itemId)?.let {
+            return gson.toJson(it)
+        }
+        return "Error - No Item Found ( There's No Item key : $itemId )"
+    }
     /**
     @GetMapping("/lol/stats/{summoner_name}")
     fun getLolSummonerStats(@PathVariable("summoner_name") name: String): String? {

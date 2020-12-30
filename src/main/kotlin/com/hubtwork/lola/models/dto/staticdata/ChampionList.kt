@@ -5,7 +5,5 @@ data class ChampionList(
     var format: String,
     var version: String,
 
-    //var data: Map<String, Champion>,
-
-
+    var data: Map<String, Champion>,
 )

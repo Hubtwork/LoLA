@@ -1,6 +1,7 @@
 package com.hubtwork.lola.service.riotAPI
 
 import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import com.hubtwork.lola.common.config.RiotApiConst
 import com.hubtwork.lola.models.dto.compiled_dto.CompiledRankStat
 import com.hubtwork.lola.models.dto.compiled_dto.CompiledSummonerSummary
@@ -23,7 +24,10 @@ import kotlin.math.roundToInt
 @Service
 class RiotApiBridgeService(private val restTemplate: RestTemplate){
 
-    private val gson = Gson()
+    private val gson = GsonBuilder()
+        .setPrettyPrinting()
+        .disableHtmlEscaping()
+        .create()
 
     fun getSummonerInfoBySummonerName(name: String): SummonerBasic =
         restTemplate.getForObject(arrayListOf(RiotApiConst.uri_summoner,name).joinToString(separator = "/" ), SummonerBasic::class)
@@ -87,6 +91,26 @@ class RiotApiBridgeService(private val restTemplate: RestTemplate){
 
 
         return null
+    }
+
+    fun getSpecificItemByName(platform: String, itemName: String) : String {
+        val realm: Realm? = checkDataDragonRegion(platform)
+        realm?.let {
+            val url = RiotApiConst.uri_datadragon_item(realm.n["item"]!!, realm.l)
+            val itemListJson: ResponseEntity<ItemList> = restTemplate.exchange(
+                url,
+                HttpMethod.GET,
+                null,
+                ItemList::class.java
+            )
+            val keys = itemListJson.body!!.data.filterValues { it.name == itemName }.keys
+
+            return if (keys.isEmpty()) "Filtering Result :: Empty"
+            else {
+                gson.toJson(itemListJson.body!!.data[keys.first()])
+            }
+        }
+        return "Get DataDragon Failed."
     }
 
     fun getSpecificItem(platform: String, itemId: String) : Item? {
